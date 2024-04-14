@@ -1,17 +1,9 @@
 ```mermaid
 sequenceDiagram
-    participant user
     participant browser
     participant server
 
-    user->>browser: Submits new note
-
-    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note
-    activate server
-    server-->>browser: Asks browser to rerender the "notes" page.
-    deactivate server
-
-    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/spa
     activate server
     server-->>browser: The HTML file
     deactivate server
@@ -25,7 +17,7 @@ sequenceDiagram
 
     Note right of browser: Browser seeks JavaScript file due to script element in HTML files head.
 
-    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.js
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/spa.js
     activate server
     server-->>browser: The JavaScript file
     deactivate server
@@ -37,5 +29,5 @@ sequenceDiagram
     server-->>browser: List of notes represented in JSON.
     deactivate server
 
-    Note right of browser: Browser proceeds to render the notes thanks to the JavaScript callback function.
+    Note right of browser: Browser proceeds to render the notes received.
 ```
