@@ -1,27 +1,27 @@
-const NumberForm = ({nameValue, numberValue, nameOnChange, numberOnChange, onSubmit}) => {
-    return(
-      <>
-        <form onSubmit={onSubmit}>
-          <div>
-            Name: 
-            <input
-              value = {nameValue}
-              onChange ={nameOnChange} 
-            />
-          </div>
-          <div>
-            Number: 
-            <input
-              value = {numberValue}
-              onChange = {numberOnChange}
-            />
-          </div>
-          <div>
-            <button type="submit">add</button>
-          </div>
-        </form>
-      </> 
-    )
-  }
+const NumberForm = ({nameValue, numberValue, nameOnChange, numberOnChange, onSubmit}) => (
+  <>
+    <form onSubmit={onSubmit}>
+      <div>
+        Name: &nbsp;
+        <input
+          value = {nameValue}
+          onChange ={nameOnChange} 
+        />
+      </div>
 
-  export default NumberForm
+      <div>
+        Number: &nbsp;
+        <input
+          value = {numberValue}
+          onChange = {numberOnChange}
+        />
+      </div>
+
+      <div>
+        <button type="submit">add</button>
+      </div>
+    </form>
+  </> 
+)
+
+export default NumberForm

@@ -1,81 +1,43 @@
 import { useState, useEffect } from 'react'
-import Note from './components/Note'
-import noteService from './services/notes'
+import axios from 'axios'
 
-const App = () => {
-  const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
-  const [showAll, setShowAll] = useState(true)
 
-  const toggleImportanceOf = (id) => {
-    const note = notes.find(n => n.id === id)
-    const changedNote = { ...note, important: !note.important }
-
-    noteService
-      .update(id, changedNote)
-      .then(returnedNote => {
-        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
-      })
-  }
+const App = ()=> {
+  const [searchWord, setSearch] = useState('')
+  const [countries, setCountries] = useState([])
 
   const hook = () => {
-    noteService
-      .getAll()
-      .then(initialNotes => {
-        setNotes(initialNotes.data)
-      })
-  }
-  
-  useEffect(hook, [])
-
-  const addNote = (event) => {
-    event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5
+    console.log(searchWord)
+    if (searchWord) {
+      axios
+        .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
+        .then(response => {
+          setCountries(response.data)
+        })
     }
     
-    noteService
-      .create(noteObject)
-      .then(returnedNote => {
-        setNotes(notes.concat(returnedNote))
-        setNewNote('')
-      })
+  }
+  useEffect(hook, [searchWord])
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value)
   }
 
-  const handleNoteChange = (event) => {
-    console.log(event.target.value)
-    setNewNote(event.target.value)
-  }
-
-  const notesToShow = showAll
-    ? notes
-    : notes.filter(note => note.important === true)
-
-  return (
-    <div>
-      <h1>Notes</h1>
+  return(
+    <>
       <div>
-        <button onClick={() => setShowAll(!showAll)}>
-          show {showAll ? 'important' : 'all' }
-        </button>
-      </div>
-      <ul>
-        {notesToShow.map(note => 
-          <Note 
-            key={note.id} 
-            note={note}
-            toggleImportance={() => toggleImportanceOf(note.id)} />
-        )}
-      </ul>
-      <form onSubmit={addNote}>
-        <input
-          value={newNote}
-          onChange={handleNoteChange}
+        <input 
+          value={searchWord} 
+          onChange={handleSearch} 
         />
-        <button type="submit">save</button>
-      </form>   
-    </div>
+      </div>
+      <div>
+        <ul>
+          {countries.map(country => <li key = {country.name.common}>{country.name.common}</li>)}
+        </ul>
+      </div>
+    </>
+    
   )
 }
 
