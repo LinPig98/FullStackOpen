@@ -1,43 +1,37 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-
+import CountryList from './components/CountryList'
 
 const App = ()=> {
-  const [searchWord, setSearch] = useState('')
   const [countries, setCountries] = useState([])
+  const [searchWord, setSearch] = useState('')
 
   const hook = () => {
-    console.log(searchWord)
-    if (searchWord) {
-      axios
-        .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
-        .then(response => {
-          setCountries(response.data)
-        })
-    }
-    
+    axios
+      .get(`https://studies.cs.helsinki.fi/restcountries/api/all`)
+      .then(response => {
+        setCountries(response.data)
+    })   
   }
-  useEffect(hook, [searchWord])
+  useEffect(hook, [])
 
   const handleSearch = (event) => {
     setSearch(event.target.value)
   }
 
+  const searchFilter = searchWord === "" ? countries
+    :countries.filter(country => country.name.common.toLowerCase()
+    .includes(searchWord.toLowerCase()))
+
   return(
     <>
-      <div>
+        <b>Search country: </b>
         <input 
           value={searchWord} 
           onChange={handleSearch} 
         />
-      </div>
-      <div>
-        <ul>
-          {countries.map(country => <li key = {country.name.common}>{country.name.common}</li>)}
-        </ul>
-      </div>
+        <CountryList countries={searchFilter} />
     </>
-    
   )
 }
 
